@@ -100,3 +100,8 @@ async def on_app_shutdown():
     await disconnect_mongo()
     await disconnect_redis()
     logger.info("Disconnected MongoDB and Redis!")
+
+# 테스트용
+@app.get("/api/health")
+async def health_check():
+    return {"message": "FastAPI와 연결되었습니다!"}

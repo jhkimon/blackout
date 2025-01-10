@@ -7,7 +7,7 @@ import jwt
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # 인증이 필요 없는 경로는 통과
-        public_paths = ["/api/user/login", "/api/user/register", "/docs", "/openapi.json"]
+        public_paths = ["/api/health", "/api/user/login", "/api/user/register", "/docs", "/openapi.json"]
         if request.url.path in public_paths:
             return await call_next(request)
         

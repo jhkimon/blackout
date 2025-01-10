@@ -23,6 +23,8 @@ tiktoken = "*"
 passlib = "*"
 pydantic = {extras = ["email"], version = "*"}
 pyjwt = "*"
+redis = "*"
+langchain-community = "*"
 
 [dev-packages]
 pre-commit = "*"
