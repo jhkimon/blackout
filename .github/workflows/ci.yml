@@ -7,7 +7,7 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-latest # 최신 버전으로 변경
 
         strategy:
             matrix:
@@ -17,13 +17,13 @@ jobs:
             # 레포지토리 체크아웃
             - uses: actions/checkout@v2
 
-            # Python 3.9 환경 설정
+            # Python 3.9 설정
             - name: Set up Python ${{ matrix.python }}
               uses: actions/setup-python@v2
               with:
                   python-version: ${{ matrix.python }}
 
-            # Python 패키지 캐시 적용
+            # Python 패키지 캐시 적용 (설치 속도 향상)
             - name: Cache pip
               uses: actions/cache@v2
               with:
@@ -32,9 +32,10 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-pip-
 
-            # 의존성 설치
+            # 의존성 설치 (jq 설치 및 requirements 변환)
             - name: Install dependencies
               run: |
-                  sudo apt-get update && sudo apt-get install -y jq
+                  sudo apt-get update && sudo apt-get install -y jq  # jq 설치
                   pip install pipenv
-                  pipenv install --dev  # 개발 의존성까지 설치
+                  pipenv lock -r > requirements.txt  # 더 간결한 변환
+                  pip install -r requirements.txt
