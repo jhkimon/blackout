@@ -1,37 +1,56 @@
-name: CI pipeline
-
+name: CI Pipeline
 
 on:
-  push:
-    branches:
-    - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  build:
-    runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        python: [3.9]
+    backend:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./backend
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
-      - name: Install dependencies
-        run: |
-          jq -r '.default
-          | to_entries[]
-          | .key + .value.version' \
-          Pipfile.lock > requirements.txt
-          jq -r '.develop
-          | to_entries[]
-          | .key + .value.version' \
-          Pipfile.lock > develop.requirements.txt       
-          pip install -r develop.requirements.txt
-          pip install -r requirements.txt
-      - name: Run tests
-        run: |
-          pytest -s
+        strategy:
+            matrix:
+                python-version: [3.9]
 
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v2
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            - name: Install backend dependencies
+              run: |
+                  pip install -r requirements.txt
+
+    frontend:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./frontend
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 16
+
+            - name: Install frontend dependencies
+              run: |
+                  npm install
+
+            - name: Run frontend build
+              run: |
+                  npm run build
