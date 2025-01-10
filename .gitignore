@@ -1,0 +1,48 @@
+# 🔥 Python (Backend)
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.env
+backend/.production.env
+backend/.development.env
+.venv/
+env/
+venv/
+Pipfile.lock
+
+# 🐳 Docker
+docker-compose.override.yml
+*.pid
+
+# 📦 Node.js (Frontend)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+
+# 📂 Build Directories
+dist/
+build/
+frontend/.next/
+frontend/out/
+
+# ⚙️ OS & IDE Files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# 🚀 Deployment
+.env.*
+.env
+*.pem
+*.key
+
+# 🛠️ Testing
+coverage/
+htmlcov/
+*.cover
+.pytest_cache/
+junitxml_reports/
