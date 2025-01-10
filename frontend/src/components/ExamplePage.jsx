@@ -9,16 +9,16 @@ const ExamplePage = () => {
             <header className="container mx-auto py-6 flex justify-between items-center">
                 <div className="text-heading-5 font-bold md:text-heading-3">LOGO</div>
                 <nav className="hidden md:flex space-x-12">
-                    <a href="#" className="text-heading-5 hover:text-gray-400">
+                    <a href="/" className="text-heading-5 hover:text-gray-400">
                         Nav1
                     </a>
-                    <a href="#" className="text-heading-5 hover:text-gray-400">
+                    <a href="/" className="text-heading-5 hover:text-gray-400">
                         Nav2
                     </a>
-                    <a href="#" className="text-heading-5 hover:text-gray-400">
+                    <a href="/" className="text-heading-5 hover:text-gray-400">
                         Nav3
                     </a>
-                    <a href="#" className="text-heading-5 hover:text-gray-400">
+                    <a href="/" className="text-heading-5 hover:text-gray-400">
                         Nav4
                     </a>
                 </nav>
