@@ -1,41 +1,37 @@
 name: CI pipeline
 
+
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+    - main
 
 jobs:
-    build:
-        runs-on: ubuntu-latest # 최신 버전으로 변경
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python: [3.9]
 
-        strategy:
-            matrix:
-                python: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install dependencies
+        run: |
+          jq -r '.default
+          | to_entries[]
+          | .key + .value.version' \
+          Pipfile.lock > requirements.txt
+          jq -r '.develop
+          | to_entries[]
+          | .key + .value.version' \
+          Pipfile.lock > develop.requirements.txt       
+          pip install -r develop.requirements.txt
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          pytest -s
 
-        steps:
-            # 레포지토리 체크아웃
-            - uses: actions/checkout@v2
-
-            # Python 3.9 설정
-            - name: Set up Python ${{ matrix.python }}
-              uses: actions/setup-python@v2
-              with:
-                  python-version: ${{ matrix.python }}
-
-            # Python 패키지 캐시 적용 (설치 속도 향상)
-            - name: Cache pip
-              uses: actions/cache@v2
-              with:
-                  path: ~/.cache/pip
-                  key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-pip-
-
-            # 의존성 설치 (jq 설치 및 requirements 변환)
-            - name: Install dependencies
-              run: |
-                  sudo apt-get update && sudo apt-get install -y jq  # jq 설치
-                  pip install pipenv
-                  pipenv lock -r > requirements.txt  # 더 간결한 변환
-                  pip install -r requirements.txt
