@@ -30,6 +30,7 @@ chromadb = "*"
 pdfplumber = "*"
 slack-bolt = "*"
 slack-sdk = "*"
+langchain-openai = "*"
 
 [dev-packages]
 pre-commit = "*"
