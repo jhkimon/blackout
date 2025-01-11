@@ -25,6 +25,11 @@ pydantic = {extras = ["email"], version = "*"}
 pyjwt = "*"
 redis = "*"
 langchain-community = "*"
+bcrypt = "*"
+chromadb = "*"
+pdfplumber = "*"
+slack-bolt = "*"
+slack-sdk = "*"
 
 [dev-packages]
 pre-commit = "*"

@@ -4,11 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.middlewares.exception_handler import register_exception_handlers
 from fastapi.security import HTTPBearer
 from fastapi.openapi.utils import get_openapi
-from src.domain.chatbot.router import router as chatbot_router
 from src.domain.user.router import router as user_router
 from src.database.mongodb import connect_mongo, disconnect_mongo
 from src.database.redis import connect_redis, disconnect_redis
 from dotenv import load_dotenv
+from src.domain.slackbot.router import router as slack_router
+
 import os
 import logging
 import logging.config
@@ -36,7 +37,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(AuthMiddleware)
+# app.add_middleware(AuthMiddleware)
 register_exception_handlers(app)
 
 bearer_scheme = HTTPBearer()
@@ -61,20 +62,22 @@ def custom_openapi():
         }
     }
 
-    # 전체 API에 보안 스키마 적용
+    # 인증이 필요한 경로만 BearerAuth 적용
+    secure_paths = ["/api/user/me"]
+
     for path in openapi_schema["paths"]:
         for method in openapi_schema["paths"][path]:
-            openapi_schema["paths"][path][method]["security"] = [{"BearerAuth": []}]
+            # secure_paths에 포함된 경로만 인증 적용
+            if any(path.startswith(secure) for secure in secure_paths):
+                openapi_schema["paths"][path][method]["security"] = [{"BearerAuth": []}]
 
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
-app.openapi = custom_openapi
-
 
 
 # 라우터 연결
-app.include_router(chatbot_router, prefix="/api/chatbot")
+app.include_router(slack_router)
 app.include_router(user_router, prefix="/api")
 
 # 앱 시작 시 MongoDB, Redis 연결
