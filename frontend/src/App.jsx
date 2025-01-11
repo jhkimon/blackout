@@ -14,8 +14,9 @@ const App = () => {
 
     // ✅ 백엔드에서 데이터 가져오기
     useEffect(() => {
+        console.log(`백엔드 URL: ${process.env.REACT_APP_API_URL}`); // 콘솔 확인
         axios
-            .get('http://localhost:8000/api/health')
+            .get(`${process.env.REACT_APP_API_URL}/api/health`)
             .then((response) => {
                 setBackendData(response.data.message);
                 setLoading(false);
