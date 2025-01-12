@@ -15,19 +15,21 @@ from src.domain.synectics.service import generate_distinct_synectics_words
 router = APIRouter(prefix="/user", tags=["User"])
 
 # ✅ 회원가입 API
-@router.post("/register", summary="회원가입")
-async def register(user_data: UserRegisterDTO, slack_id: str = Form(None)):
+@router.post("/register")
+async def register_user(user_data: UserRegisterDTO):
     try:
-        user_id = await UserService.register_user(
-            user_data.email,
-            user_data.username,
-            user_data.password,
-            slack_id  # ✅ Slack ID 저장
+        await UserService.register_user(
+            email=user_data.email,
+            username=user_data.username,
+            password=user_data.password
         )
-        return {"message": "회원가입 성공", "user_id": user_id}
+        return {"message": "✅ 회원가입이 완료되었습니다."}
+    
+    except DataConflictError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-# ✅ 로그인 API
+        raise HTTPException(status_code=500, detail=f"❌ 서버 오류: {str(e)}")
 
 @router.post("/login", summary="로그인")
 async def login(user_data: UserLoginDTO):
