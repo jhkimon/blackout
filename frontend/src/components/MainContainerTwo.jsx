@@ -1,21 +1,48 @@
 import React from "react";
+import HeaderTwo from "./HeaderTwo";
+import MiddleTwo from "./MiddleTwo";
+import PromptInput from "./PromptInput";
+import ProgressBar from "./ProgressBar";
 
-const MainContainerTwo = ({ userInput }) => {
+// 전역 email 사용
+import { useAppContext } from "../context/AppContext";
+
+// API 함수들
+import { updateTopic, generateSynectics } from "../api/topic";
+
+const MainContainer = () => {
+  // Context 에서 email 가져오기 (로그인 시 저장된 값)
+  const { email } = useAppContext();
+
+  // PromptInput -> onInputSubmit 에서 topic을 받아서 처리
+  const handleTopicSubmit = async (topic) => {
+    console.log("[MainContainer] Received topic:", topic);
+    console.log("[MainContainer] Current email from context:", email);
+
+    try {
+      // (1) updateTopic 호출
+      const updateResponse = await updateTopic(email, topic);
+      console.log("[MainContainer] updateTopic response:", updateResponse);
+
+      // (2) generateSynectics 호출
+      const generateResponse = await generateSynectics(email);
+      console.log("[MainContainer] generateSynectics response:", generateResponse);
+    } catch (error) {
+      console.error("[MainContainer] API error:", error);
+    }
+
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[500px] px-8 py-8 bg-[#343434] rounded-lg">
-      <h3 className="text-3xl font-semibold text-white font-sans mb-4">
-        아이디어 제안
-      </h3>
-      <div className="flex flex-col items-center justify-center gap-4 w-full bg-[#4e4e4e] px-6 py-4 rounded-lg">
-        <p className="text-lg font-medium text-white">
-          {userInput || "사용자 입력이 여기에 표시됩니다."}
-        </p>
-        <p className="text-base text-white opacity-75">
-          입력한 내용을 기반으로 다음 단계를 진행합니다.
-        </p>
-      </div>
+    <div className="flex reactive overflow-hidden flex-col items-center max-w-[1568px] min-h-screen bg-[#1a1a1a] font-sans">
+      <HeaderTwo />
+      <ProgressBar />
+      <MiddleTwo />
+      
+      {/* PromptInput에서 입력 받은 topic을 handleTopicSubmit로 보내도록 연결 */}
+      <PromptInput onInputSubmit={handleTopicSubmit} />
     </div>
   );
 };
 
-export default MainContainerTwo;
+export default MainContainer;

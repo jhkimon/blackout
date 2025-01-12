@@ -2,7 +2,7 @@ import React from "react";
 
 const Middle = () => {
   return (
-    <div className="rounded-lg overflow-hidden z-10 scale-[0.7] mt-[-7%] reactive flex flex-col items-center w-[1,254.4pxpx] h-[371px] px-8 py-10 bg-[#343434] pb-[2%]">
+    <div className="rounded-lg overflow-hidden z-10 scale-[0.6] mt-[-4%] reactive flex flex-col items-center w-[1,254.4pxpx] h-[371px] px-8 py-10 bg-[#343434] pb-[2%]">
       <div className="flex flex-col items-center gap-6 w-full">
         {/* Title */}
         <div className="flex items-end gap-2 mt-[-2%]">
@@ -77,11 +77,11 @@ const Middle = () => {
             <h3 className="text-xl font-bold mb-4">개념</h3>
             <p className="text-base">
               시네틱스(Synectics)는 문제 해결이나 창의적인 아이디어 개발을 위해
-              <span className="font-bold">유추와 비유를 활용</span>하는<br />
+              <span className="font-bold">유추와 비유를 활용</span>하는
               발상법입니다.
             </p>
             <p className="text-base">
-            시네틱스 발상법은 <span className="font-bold">서로 관련 없어 보이는 요소들을 연결</span>하여 <span className="font-bold">새로운 관점과 창의적인 솔루션을 도출</span>하는<br />데 초점을 맞춥니다.
+            시네틱스 발상법은 <span className="font-bold">서로 관련 없어 보이는 요소들을 연결</span>하여 <span className="font-bold">새로운 관점과 창의적인 솔루션을 도출</span>하는데 초점을 맞춥니다.
 
             </p>
           </div>
@@ -97,7 +97,7 @@ const Middle = () => {
               </span>: 기존의 지식과 관점에서 벗어나 새로운 접근 방식을 수용하려는 태도가 중요합니다.
             </p><br/>
             <p className="text-base">
-              <span className="font-bold">의도적 비논리: </span>논리적으로 접근하기 어려운 문제를 해결하기 위해 일부러 비논리적이거나 비현실적인<br /> 아이디어를 허용합니다.
+              <span className="font-bold">의도적 비논리: </span>논리적으로 접근하기 어려운 문제를 해결하기 위해 일부러 비논리적이거나 비현실적인 아이디어를 허용합니다.
             </p>
 
 

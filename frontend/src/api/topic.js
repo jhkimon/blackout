@@ -1,4 +1,15 @@
-const API_URL = process.env.REACT_APP_API_URL; // .env 파일에서 API URL 가져오기
+import axios from "axios";
+
+
+// API Base URL from environment variables
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
+if (!API_BASE_URL) {
+  console.error("API URL is not set. Please check your environment variables.");
+}
+
+// src/services/api.js
+const API_URL = process.env.REACT_APP_API_URL; // .env 파일의 API URL 가져오기
 
 // 첫 번째 API 호출: /api/user/topic
 export const updateTopic = async (email, topic) => {
@@ -15,7 +26,7 @@ export const updateTopic = async (email, topic) => {
       throw new Error("Failed to update topic");
     }
 
-    return response.json();
+    return response.json(); // JSON 결과 반환
   } catch (error) {
     console.error(error);
     throw error;
@@ -37,7 +48,7 @@ export const generateSynectics = async (email) => {
       throw new Error("Failed to generate synectics");
     }
 
-    return response.json();
+    return response.json(); // JSON 결과 반환
   } catch (error) {
     console.error(error);
     throw error;

@@ -2,7 +2,7 @@ import React from "react";
 
 const ProgressBar = () => {
   return (
-    <div className="overflow-hidden scale-[0.9] reactive flex flex-col justify-start items-start w-[1254.4px] h-[155px] gap-2.5 px-6 py-4 rounded-lg bg-[#343434] mb-[3%] font-sans">
+    <div className="overflow-hidden scale-[0.8] reactive flex flex-col justify-start items-start w-[1254.4px] h-[155px] gap-2.5 px-6 py-4 rounded-lg bg-[#343434] mt-[-1%] font-sans">
       <div className="flex justify-start items-center w-full gap-4">
         {/* Step 1 - Active */}
         <div className="flex flex-col justify-start items-start flex-grow relative overflow-hidden gap-4">

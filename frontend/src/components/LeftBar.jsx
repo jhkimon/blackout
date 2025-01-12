@@ -63,7 +63,7 @@ const LeftBar = () => {
             </div>
             <div className="scale-[0.9] mt-[-15%] p-4 bg-black">
                 {/* 상위 카드 섹션 */}
-                <div className="flex flex-col gap-6 mb-12">
+                <div className="flex flex-col items-center gap-6 mb-12">
                     {cards.slice(0, 2).map((card, index) => (
                         <div key={index} className="flex flex-col w-80% gap-2 p-4  rounded-lg shadow-lg">
                             <p className="text-lg font-medium text-[#828282]">{card.date}</p>
@@ -83,7 +83,7 @@ const LeftBar = () => {
                 </div>
 
                 {/* 하단 카드 섹션 */}
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col items-center gap-8">
                     {cards.slice(2, 5).map((card, index) => (
                         <div key={index} className="flex flex-col w-80% gap-2 p-4  rounded-lg shadow-lg">
                             <p className="text-lg font-medium text-[#828282]">{card.date}</p>

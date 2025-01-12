@@ -4,6 +4,8 @@ import InputBox from "../components/InputBox";
 import Button from "../components/Button";
 import { login } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+// 1) AppContext import
+import { useAppContext } from "../context/AppContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,12 +13,25 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // 2) Context에서 setEmail을 가져오기
+  const { setEmail: setGlobalEmail } = useAppContext();
+
   const handleLogin = async () => {
     try {
       setError(""); // Clear error
+
+      // 실제 로그인 API 호출
       const response = await login(email, password);
-      localStorage.setItem("access_token", response.access_token); // Save token
-      navigate("/"); // Redirect on success
+
+      // 로그인 성공 시 access_token 저장
+      localStorage.setItem("access_token", response.access_token);
+
+      // 3) Context에 이메일 저장
+      setGlobalEmail(email);
+      console.log("Stored email in context:", email);
+
+      // 로그인 성공 후 이동할 페이지
+      navigate("/");
     } catch (err) {
       setError("이메일 또는 비밀번호가 잘못되었습니다.");
     }
@@ -24,28 +39,24 @@ export default function Login() {
 
   return (
     <div className="w-full h-screen relative overflow-hidden bg-black flex flex-col font-sans">
-      <Header
-        title="LOGO"
-        leftLabel="Home"
-        leftIcon={
-          <svg
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-          >
-            <path
-              d="M15 18L9 12L15 6"
-              stroke="white"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        {/* 배경 이미지 레이어 */}
+        <div
+                className="absolute inset-0 z-0"
+                style={{
+                    backgroundImage: 'url(/images/background.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
             />
-          </svg>
-        }
-      />
+            {/* blur 오버레이 레이어 */}
+            <div className="absolute inset-0 z-0 backdrop-blur-md bg-black/30" />
+
+            {/* 컨텐츠 wrapper */}
+            <div className="relative z-10 flex flex-col h-full">
+      {/* Header */}
+      <div className="flex justify-center items-center mt-10">
+                    <img src="/images/Logo.png" alt="Logo" className="w-23 h-10" />
+                </div>
       <div className="flex flex-col items-center justify-center w-full h-full gap-6 px-6">
         <div className="text-center mb-6">
           <h1 className="text-white font-sans font-bold text-5xl leading-snug mt-[20%]">
@@ -59,8 +70,8 @@ export default function Login() {
             showLabel={true}
             showAsterisk={true}
             placeholder="이메일을 입력해주세요"
-            value={email} // Bind value
-            onChange={(e) => setEmail(e.target.value)} // Handle change
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           {/* Password Input */}
           <div className="mt-[2%]">
@@ -70,8 +81,8 @@ export default function Login() {
               showAsterisk={true}
               placeholder="비밀번호를 입력해주세요"
               type="password"
-              value={password} // Bind value
-              onChange={(e) => setPassword(e.target.value)} // Handle change
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           {/* Error Message */}
@@ -83,7 +94,7 @@ export default function Login() {
             bgColor="bg-white"
             textColor="text-black"
             borderColor="border-white"
-            onClick={handleLogin} // Trigger login
+            onClick={handleLogin}
           />
 
           {/* Divider */}
@@ -101,7 +112,7 @@ export default function Login() {
             bgColor="bg-black"
             textColor="text-white"
             borderColor="border-white"
-            onClick={() => console.log("Slack 로그인")} // Placeholder
+            onClick={() => console.log("Slack 로그인")}
           />
           <Button
             label="Sign in with Google"
@@ -110,7 +121,7 @@ export default function Login() {
             bgColor="bg-black"
             textColor="text-white"
             borderColor="border-white"
-            onClick={() => console.log("Google 로그인")} // Placeholder
+            onClick={() => console.log("Google 로그인")}
           />
 
           {/* Signup Link */}
@@ -122,6 +133,7 @@ export default function Login() {
             >
               회원가입
             </a>
+            </div>
           </div>
         </div>
       </div>
