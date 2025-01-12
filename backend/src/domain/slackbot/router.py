@@ -87,10 +87,9 @@ async def handle_slack_commands(
     # ✅ user_id로 이메일 조회
     user_email = get_user_email(user_id)
     if not user_email:
-        return {
-            "response_type": "ephemeral",
-            "text": "❗ 사용자 이메일을 조회할 수 없습니다. 관리자에게 문의하세요."
-        }
+        user_email = f"unknown_{user_id}@example.com"  # 임시 이메일 또는 기본 값 할당
+        logger.warning(f"❗ 사용자 이메일을 조회할 수 없습니다. user_id: {user_id}")
+
 
     command_type = args[0]
 
