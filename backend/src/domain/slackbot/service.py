@@ -1,8 +1,8 @@
+from src.domain.synectics.service import generate_synectics_sentence
 from src.domain.slackbot.repo import send_slack_message
 from src.domain.slackbot.repo import send_slack_message_with_blocks
 from src.domain.slackbot.utils import format_summary_with_buttons
 from src.domain.slackbot.repo import send_slack_message_async
-from src.domain.resynectics.service import regenerate_synectics_sentence
 from src.domain.user.repo import UserRepository
 from src.domain.summary.service import generate_summary
 from src.domain.slackbot.repo import get_slack_user_email
@@ -56,7 +56,7 @@ async def process_resynectics_action(user_id: str, channel_id: str):
         recent_messages = await UserRepository.get_recent_messages(channel_id)
 
         # ✅ 메시지에서 두 단어 추출 및 시네틱스 문장 생성
-        synectics_sentence = await regenerate_synectics_sentence(recent_messages)
+        synectics_sentence = await generate_synectics_sentence(recent_messages)
 
         # ✅ Slack으로 시네틱스 문장 전송
         await send_slack_message_async(channel_id, f"💡 *다시 발상한 결과:*\n\n{synectics_sentence}")

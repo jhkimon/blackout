@@ -4,7 +4,6 @@ from src.domain.slackbot.repo import get_recent_messages, send_message_with_butt
 from src.domain.summary.service import generate_summary
 from src.domain.synectics.service import generate_synectics
 from src.domain.user.service import UserService
-from src.domain.resynectics.router import resynect_idea
 from src.domain.slackbot.service import handle_button_action
 from src.domain.slackbot.service import send_slack_message, send_slack_message_async, send_message_with_buttons_service
 from src.domain.slackbot.service import process_done_action, process_resynectics_action
