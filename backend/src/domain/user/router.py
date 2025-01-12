@@ -78,7 +78,13 @@ async def generate_synectics(email: str = Query(...)):
         raise HTTPException(status_code=404, detail="❗ 해당 이메일의 유저를 찾을 수 없습니다.")
 
     # ✅ 유저의 topic 값 확인
+<<<<<<< HEAD
     topic = user.get("topic") if user.get("topic") else ''
+=======
+    topic = user.get("topic")
+    if not topic:
+        raise HTTPException(status_code=404, detail="❗ 유저의 주제가 설정되어 있지 않습니다.")
+>>>>>>> 68252b2 (feat: BE with slack bot)
 
     # ✅ 주제를 기반으로 두 단어 생성
     try:

@@ -1,7 +1,10 @@
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
+<<<<<<< HEAD
 from src.domain.slackbot.repo import send_slack_message
+=======
+>>>>>>> 68252b2 (feat: BE with slack bot)
 
 
 # ✅ GPT-4o 모델 초기화

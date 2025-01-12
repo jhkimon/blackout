@@ -37,6 +37,10 @@ class UserService:
 
     # ✅ 로그인
     @staticmethod
+    async def update_topic(email: str, topic: str):
+        await UserRepository.update_user_topic(email, topic)
+
+    @staticmethod
     async def login_user(email: str, password: str):
         user = await UserRepository.find_by_email(email)
         if not user:

@@ -3,7 +3,11 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
 
 # ✅ GPT-4o 초기화
+<<<<<<< HEAD
 llm = ChatOpenAI(model="gpt-4o", temperature=0.5)
+=======
+llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
+>>>>>>> 68252b2 (feat: BE with slack bot)
 
 # ✅ 요약 프롬프트 템플릿
 prompt_template = ChatPromptTemplate.from_template("""
