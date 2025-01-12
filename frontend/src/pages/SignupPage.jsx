@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import Button from '../components/Button';
-import { signup } from '../api/auth'; // 회원가입 API 호출 함수
 import { useNavigate } from 'react-router-dom';
 
 export default function SignupPage() {
