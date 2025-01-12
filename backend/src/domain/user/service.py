@@ -52,7 +52,7 @@ class UserService:
         if not user:
             raise DataNotFoundError("사용자 정보를 찾을 수 없습니다.")
         return {
-            "email": user["email"],
+            "email": user["email"] or "",
             "username": user["username"],
             "topic": user.get("topic", "주제가 설정되지 않았습니다."),
             "word_a": user.get("word_a", "아직 단어가 없습니다."),

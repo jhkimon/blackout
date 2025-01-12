@@ -6,23 +6,39 @@ import os
 # ✅ Slack WebClient 초기화
 slack_client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
 
+# ✅ Slack 사용자 이메일 조회 (에러 대신 None 반환)
 async def get_user_email(user_id: str) -> str:
     try:
         response = slack_client.users_info(user=user_id)
-        email = response["user"]["profile"]["email"]
+        # 프로필에 'email' 키가 없을 수 있으므로 get() 사용
+        email = response["user"]["profile"].get("email")
+        if not email:
+            print(f"⚠️ 이메일이 없는 사용자입니다: {user_id}")
+            return None
         return email
     except SlackApiError as e:
         print(f"❌ Slack 사용자 이메일 조회 실패: {e.response['error']}")
-        raise HTTPException(status_code=500, detail="Slack 사용자 이메일 조회 실패")
-    
+        return None
+    except KeyError:
+        print(f"❗ Slack 프로필 정보가 올바르지 않습니다: {user_id}")
+        return None
+
+
+# ✅ Slack 사용자 이메일 조회 (사용 목적별로 분리할 경우 동일 로직)
 async def get_slack_user_email(user_id: str) -> str:
     try:
         response = slack_client.users_info(user=user_id)
-        return response["user"]["profile"]["email"]
+        email = response["user"]["profile"].get("email")
+        if not email:
+            print(f"⚠️ 이메일이 없는 사용자입니다: {user_id}")
+            return None
+        return email
     except SlackApiError as e:
         print(f"❌ Slack 사용자 이메일 조회 실패: {e.response['error']}")
         return None
-    
+    except KeyError:
+        print(f"❗ Slack 프로필 정보가 올바르지 않습니다: {user_id}")
+        return None
 async def send_message_with_buttons(channel_id: str, summary: str):
     message_payload = format_summary_with_buttons(summary)
 

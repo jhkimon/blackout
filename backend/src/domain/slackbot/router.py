@@ -66,7 +66,6 @@ async def handle_slack_commands(
     user_id: str = Form(...)
 ):
     args = text.strip().split()
-
     # ✅ 사용법 안내
     if not args or args[0] not in ["요약하기", "발상하기"]:
         return {
@@ -87,10 +86,8 @@ async def handle_slack_commands(
     # ✅ user_id로 이메일 조회
     user_email = get_user_email(user_id)
     if not user_email:
-        return {
-            "response_type": "ephemeral",
-            "text": "❗ 사용자 이메일을 조회할 수 없습니다. 관리자에게 문의하세요."
-        }
+        user_email = f"guest_{user_id}"
+        print(f"⚠️ 이메일 조회 실패, 임시 이메일 부여: {user_email}")
 
     command_type = args[0]
 
