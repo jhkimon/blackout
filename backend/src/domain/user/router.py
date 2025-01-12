@@ -15,21 +15,19 @@ from src.domain.synectics.service import generate_distinct_synectics_words
 router = APIRouter(prefix="/user", tags=["User"])
 
 # ✅ 회원가입 API
-@router.post("/register")
-async def register_user(user_data: UserRegisterDTO):
+@router.post("/register", summary="회원가입")
+async def register(user_data: UserRegisterDTO, slack_id: str = Form(None)):
     try:
-        await UserService.register_user(
-            email=user_data.email,
-            username=user_data.username,
-            password=user_data.password
+        user_id = await UserService.register_user(
+            user_data.email,
+            user_data.username,
+            user_data.password,
+            slack_id  # ✅ Slack ID 저장
         )
-        return {"message": "✅ 회원가입이 완료되었습니다."}
-    
-    except DataConflictError as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    
+        return {"message": "회원가입 성공", "user_id": user_id}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"❌ 서버 오류: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+# ✅ 로그인 API
 
 @router.post("/login", summary="로그인")
 async def login(user_data: UserLoginDTO):
@@ -80,13 +78,7 @@ async def generate_synectics(email: str = Query(...)):
         raise HTTPException(status_code=404, detail="❗ 해당 이메일의 유저를 찾을 수 없습니다.")
 
     # ✅ 유저의 topic 값 확인
-<<<<<<< HEAD
     topic = user.get("topic") if user.get("topic") else ''
-=======
-    topic = user.get("topic")
-    if not topic:
-        raise HTTPException(status_code=404, detail="❗ 유저의 주제가 설정되어 있지 않습니다.")
->>>>>>> 68252b2 (feat: BE with slack bot)
 
     # ✅ 주제를 기반으로 두 단어 생성
     try:
