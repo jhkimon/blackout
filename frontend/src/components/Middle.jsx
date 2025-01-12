@@ -2,7 +2,7 @@ import React from "react";
 
 const Middle = () => {
   return (
-    <div className="overflow-hidden z-10 scale-[0.7] mt-[-7%] reactive flex flex-col items-center w-[1,254.4pxpx] h-[371px] px-8 py-10 bg-[#343434] pb-[2%]">
+    <div className="rounded-lg overflow-hidden z-10 scale-[0.7] mt-[-7%] reactive flex flex-col items-center w-[1,254.4pxpx] h-[371px] px-8 py-10 bg-[#343434] pb-[2%]">
       <div className="flex flex-col items-center gap-6 w-full">
         {/* Title */}
         <div className="flex items-end gap-2 mt-[-2%]">
@@ -72,7 +72,7 @@ const Middle = () => {
         </div>
 
         {/* Description Section */}
-        <div className="flex flex-row scale-[0.9] mt-[-1%] gap-4 justify-center w-full">
+        <div className="flex flex-row scale-[0.95] mt-[-1.5%] gap-4 w-full">
           <div className="bg-[#4e4e4e] p-6 rounded-lg text-white font-sans">
             <h3 className="text-xl font-bold mb-4">개념</h3>
             <p className="text-base">

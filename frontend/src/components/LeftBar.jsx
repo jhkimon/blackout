@@ -45,50 +45,36 @@ const LeftBar = () => {
     ];
 
     return (
-        <div className="overflow-hidden relative reactive w-[281.6px] h-[auto] bg-black">
+        <div className="overflow-hidden relative w-[281.6px] h-screen bg-black">
             {/* 상단 박스 */}
-            <div className="absolute top-0 left-0 w-[352] h-[86] mt-[2%] bg-black flex items-center justify-between px-4">
+            <div className="flex items-center justify-between px-4 py-2 ">
                 {/* 텍스트 로고 */}
                 <img
-                    src="/images/Logo.png" // 아이콘 파일 경로
+                    src="/images/Logo.png"
                     alt="Logo"
-                    className="w-30 h-8 mt-[2%]"
+                    className="w-30 h-8"
                 />
                 {/* 이미지 아이콘 */}
                 <img
-                    src="/images/BookIcon.png" // 아이콘 파일 경로
+                    src="/images/BookIcon.png"
                     alt="Icon Description"
-                    className="w-8 h-8 mt-[2%] ml-[70%]"
+                    className="w-8 h-8"
                 />
             </div>
-            <div className="scale-[0.9] w-[352] h-full bg-black p-4 relative top-[86]">
+            <div className="scale-[0.9] mt-[-15%] p-4 bg-black">
                 {/* 상위 카드 섹션 */}
                 <div className="flex flex-col gap-6 mb-12">
                     {cards.slice(0, 2).map((card, index) => (
-                        <div key={index} className="flex flex-col gap-2 p-4 bg-black rounded-lg shadow-lg">
-                            {/* 날짜 */}
+                        <div key={index} className="flex flex-col w-80% gap-2 p-4  rounded-lg shadow-lg">
                             <p className="text-lg font-medium text-[#828282]">{card.date}</p>
-
-                            {/* 방법 */}
                             <p className="text-sm text-[#ff6501]">{card.method}</p>
-
-                            {/* 제목 */}
                             <p className="text-xl font-medium text-white">{card.title}</p>
-
-                            {/* 하단 정보 */}
                             <div className="flex justify-between items-center">
-                                {/* 참여자 */}
                                 <div className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faUser} className="text-[#828282] w-4 h-4" />
                                     <span className="text-xs text-[#828282]">{card.participants}명</span>
                                 </div>
-
-                                {/* 진행 상태 */}
-                                <p
-                                    className={`text-xs ${
-                                        card.status === '진행완료' ? 'text-[#40d34e]' : 'text-[#ff0000]'
-                                    }`}
-                                >
+                                <p className={`text-xs ${card.status === '진행완료' ? 'text-[#40d34e]' : 'text-[#ff0000]'}`}>
                                     {card.status}
                                 </p>
                             </div>
@@ -99,55 +85,23 @@ const LeftBar = () => {
                 {/* 하단 카드 섹션 */}
                 <div className="flex flex-col gap-8">
                     {cards.slice(2, 5).map((card, index) => (
-                        <div key={index} className="flex flex-col gap-2 p-4 bg-black rounded-lg shadow-lg">
-                            {/* 날짜 */}
+                        <div key={index} className="flex flex-col w-80% gap-2 p-4  rounded-lg shadow-lg">
                             <p className="text-lg font-medium text-[#828282]">{card.date}</p>
-
-                            {/* 방법 */}
                             <p className="text-sm text-[#ff6501]">{card.method}</p>
-
-                            {/* 제목 */}
                             <p className="text-xl font-medium text-white">{card.title}</p>
-
-                            {/* 하단 정보 */}
                             <div className="flex justify-between items-center">
-                                {/* 참여자 */}
                                 <div className="flex items-center gap-2">
                                     <FontAwesomeIcon icon={faUser} className="text-[#828282] w-4 h-4" />
                                     <span className="text-xs text-[#828282]">{card.participants}명</span>
                                 </div>
-
-                                {/* 진행 상태 및 이미지 */}
                                 <div className="flex items-center gap-2">
-                                    <p
-                                        className={`text-xs ${
-                                            card.status === '진행 중' ? 'text-[#FCB620]' : 'text-[#FCB620]'
-                                        }`}
-                                    >
-                                        {card.status}
-                                    </p>
-                                    {card.status === '진행 중' &&
-                                        card.progressIcon && ( // 아이콘이 있는 경우만 렌더링
-                                            <img src={card.progressIcon} alt="Progress Icon" className="w-89 h-4" />
-                                        )}
+                                    <p className="text-xs text-[#FCB620]">{card.status}</p>
+                          
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
-            {/* 좌측 하단 아이콘 섹션 */}
-            <div className="absolute top-[1030] left-4 flex gap-4">
-                <img
-                    src="/images/SlackWhiteIcon.png" // 첫 번째 아이콘 파일 경로
-                    alt="Icon 1"
-                    className="w-6 h-6"
-                />
-                <img
-                    src="/images/SettingsIcon.png" // 두 번째 아이콘 파일 경로
-                    alt="Icon 2"
-                    className="w-7 h-7 relative -top-0.5"
-                />
             </div>
         </div>
     );

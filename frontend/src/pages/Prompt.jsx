@@ -6,16 +6,15 @@ const Prompt = () => {
   return (
     <div
       className="w-full relative reactive overflow-hidden flex flex-row"
+      style={{ overflowY: "hidden" }}
     >
       <div className=" w-[281.6px]">
         <LeftBar />
       </div>
       <div className=" w-[1,254.4px] ">
-        <MainContainer />
+        <MainContainer /> 
       </div>
-      <div className="absolute bottom-[5%] right-[5%] flex justify-center items-center w-12 h-12 gap-2.5 p-2.5 rounded-full bg-[#4e4e4e]">
-    <p className="text-2xl font-semibold text-white">?</p>
-  </div>
+
     </div>
   );
 };

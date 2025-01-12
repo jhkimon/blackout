@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 // API Base URL from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -15,18 +16,24 @@ if (!API_BASE_URL) {
  * @returns {Promise<Object>} The response data containing the access token and user details.
  */
 export const login = async (email, password) => {
+
   try {
+    
     const response = await axios.post(`${API_BASE_URL}/api/user/login`, {
         "email": email || "user@example.com", // Default value for email
         "password": password 
     });
+    
     return response.data;
+    
+    
   } catch (err) {
     console.error("Login error:", err.response?.data || err.message);
     const errorMsg =
       err.response?.data?.message || "로그인 중 문제가 발생했습니다.";
     throw new Error(errorMsg);
   }
+  
 };
 
 /**

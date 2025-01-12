@@ -1,7 +1,6 @@
 import React from "react";
 import RadioGroup from "../components/RadioGroup";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
 import Header from "../components/Header";
 
 export default function Home() {

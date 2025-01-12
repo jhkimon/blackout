@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 const PromptInput = ({ onInputSubmit }) => {
+ // email과 topic 가져오기
+    
+     
+      
   const [inputValue, setInputValue] = useState(""); // Local input state
 
   const handleSubmit = () => {

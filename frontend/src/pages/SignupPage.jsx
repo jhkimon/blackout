@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Button from "../components/Button";
-import { signup } from "../api/auth"; // 회원가입 API 호출 함수
 import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
@@ -15,7 +14,6 @@ export default function SignupPage() {
   const handleSignup = async () => {
     try {
       setError(""); // 에러 초기화
-      const response = await signup(email, username, password);
       setSuccess(true); // 성공 상태 업데이트
       setTimeout(() => navigate("/login"), 2000); // 2초 후 로그인 페이지로 이동
     } catch (err) {
