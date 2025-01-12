@@ -1,56 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import axios from 'axios';
-import ColorPalette from './components/ColorPalette';
-import Semantic from './components/Semantic';
-import Typography from './components/Typography';
-import CornerRadiusDemo from './components/CornerRadiusDemo';
-import Grid from './components/Grid';
-import ExamplePage from './components/ExamplePage';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Step1 from "./pages/Home";
+import Step2 from "./pages/step2";
+import Prompt from "./pages/Prompt"; // 새로 추가된 Prompt 컴포넌트
+import SignupPage from "./pages/SignupPage"; // 새로 추가된 Prompt 컴포넌트
+import Login from "./pages/Login"; // 새로 추가된 Prompt 컴포넌트
+import Home from "./pages/Main"; // 새로 추가된 Prompt 컴포넌트
 
-const App = () => {
-    const [backendData, setBackendData] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    // ✅ 백엔드에서 데이터 가져오기
-    useEffect(() => {
-        axios
-            .get('http://localhost:8000/api/health')
-            .then((response) => {
-                setBackendData(response.data.message);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching data from backend:', error);
-                setBackendData('백엔드 연결 실패');
-                setLoading(false);
-            });
-    }, []);
-
-    return (
-        <Router>
-            <Routes>
-                {/* 메인 페이지 */}
-                <Route
-                    path="/"
-                    element={
-                        <>
-                            <h1>FastAPI 연결 상태</h1>
-                            {loading ? <p>로딩 중...</p> : <p>{backendData}</p>}
-                            <ColorPalette />
-                            <Semantic />
-                            <Typography />
-                            <CornerRadiusDemo />
-                            <Grid />
-                        </>
-                    }
-                />
-
-                {/* Example 페이지 */}
-                <Route path="/example" element={<ExamplePage />} />
-            </Routes>
-        </Router>
-    );
-};
-
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/step1" element={<Step1 />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/step2" element={<Step2 />} />
+        <Route path="/prompt" element={<Prompt />} /> {/* 새 라우트 추가 */}
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+}

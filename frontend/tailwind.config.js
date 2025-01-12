@@ -108,7 +108,7 @@ module.exports = {
                 'surface-container-high': '#686868',
                 'surface-container-highest': '#828282',
                 'on-surface': '#EAEAEA',
-                outline: '#828282',
+                outline: '#4E4E4E',
             },
             borderRadius: {
                 small: '4px',
@@ -124,5 +124,9 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  
+  plugins: [],
 };
