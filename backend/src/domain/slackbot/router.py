@@ -121,7 +121,7 @@ async def handle_slack_commands(
             "text": f"💡 *'{word_a}'*와 *'{word_b}'*를 기반으로 창의적인 문장을 생성 중입니다!"
         }
 
-# ✅ Slack 요약 처리
+# ✅ Slack Summary
 async def process_summary(channel_id: str, user_email: str):
     try:
 
@@ -134,7 +134,7 @@ async def process_summary(channel_id: str, user_email: str):
         send_long_message(channel_id, formatted_message)
 
     except Exception as e:
-        send_slack_message_async(channel_id, f"❌ 요약 생성 중 오류 발생: {str(e)}")
+        send_slack_message(channel_id, f"❌ 요약 생성 중 오류 발생: {str(e)}")
 
 # ✅ Slack 시네틱스 처리
 def process_synectics(word_a: str, word_b: str, channel_id: str):
@@ -173,9 +173,8 @@ async def handle_interactions(request: Request):
             await generate_done_summary(user_id, channel_id)
         elif action_id == "resynectics_action":
             await generate_resynectics_idea(user_id, channel_id)
-            return send_slack_message_async(channel_id, "🔄 새로운 아이디어를 생성 중입니다!")
         else:
-            await send_slack_message_async(channel_id, "❗ 알 수 없는 버튼 액션입니다.")
+            await send_slack_message(channel_id, "❗ 알 수 없는 버튼 액션입니다.")
 
         return {"status": "success"}
 

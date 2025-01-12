@@ -11,7 +11,7 @@ async def resynect_idea(
     channel_id: str = Form(...)
 ):
     try:
-        # ✅ 최근 메시지 예시 (실제 서비스에서는 DB에서 조회)
+        # ✅ 최근 메시지
         recent_messages = [
             "기존 아이디어를 새롭게 바꿔볼까?",
             "다른 관점에서 생각해보자."

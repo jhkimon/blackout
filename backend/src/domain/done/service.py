@@ -21,13 +21,12 @@ prompt_template = ChatPromptTemplate.from_template("""
 chain = LLMChain(prompt=prompt_template, llm=llm)
 
 # ✅ "대화 정리하기" 실행
-# ✅ "대화 정리하기" 실행
 async def generate_done_summary(user_id: str, channel_id: str):
     try:
         # ✅ Slack ID로 유저 조회
         user_email = await get_user_email(user_id)
         user = await UserRepository.find_by_email(user_email)
-        topic = user.get("topic", "주제가 아직 설정되지 않았습니다.")
+        topic = user.get("topic") or "일반적인 주제"
 
         # ✅ 최근 메시지 불러오기
         recent_messages = await get_recent_messages(channel_id, limit=10)
@@ -40,7 +39,7 @@ async def generate_done_summary(user_id: str, channel_id: str):
         summary = response.get("text", "").strip()  # dict에서 'text' 키로 접근
 
         # ✅ Slack으로 결과 전송
-        await send_slack_message_async(channel_id, f"📂 *'{topic}'* 주제와 연결된 대화 요약:\n\n{summary}")
+        await send_slack_message_async(channel_id, f"📂 *'{topic}'* \n[주제와 연결된 대화 요약]:\n\n{summary}")
 
     except Exception as e:
         await send_slack_message_async(channel_id, f"❌ 대화 정리 실패: {str(e)}")

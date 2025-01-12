@@ -16,9 +16,7 @@ class UserService:
         if not user:
             raise DataNotFoundError("해당 이메일의 사용자를 찾을 수 없습니다.")
 
-        topic = user.get("topic")
-        if not topic:
-            raise DataNotFoundError("유저의 주제가 설정되어 있지 않습니다.")
+        topic = user.get("topic") if user.get("topic") else '' 
 
         return topic
     # ✅ 회원가입
@@ -89,9 +87,7 @@ class UserService:
         if not user:
             raise DataNotFoundError("해당 이메일의 유저를 찾을 수 없습니다.")
 
-        topic = user.get("topic")
-        if not topic:
-            raise DataNotFoundError("유저의 주제가 설정되어 있지 않습니다.")
+        topic = user.get("topic") if user.get("topic") else ''
 
         word_a, word_b = await generate_distinct_synectics_words(topic)
         await UserRepository.update_synectics_words(email, word_a, word_b)
