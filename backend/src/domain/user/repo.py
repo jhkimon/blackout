@@ -20,17 +20,6 @@ class UserRepository:
         await db["users"].update_one({"email": email}, {"$set": {"topic": topic}})
     
     @staticmethod
-    async def update_user_deeplink(email: str, deeplink: str):
-        db = get_database()
-        await db["users"].update_one({"email": email}, {"$set": {"deeplink": deeplink}})
-
-    @staticmethod
-    async def find_topic_by_email(email: str):
-        db = get_database()
-        user = await db["users"].find_one({"email": email})
-        return user.get("topic") if user else None
-    
-    @staticmethod
     async def update_synectics_words(email: str, word_a: str, word_b: str):
         db = get_database()
         await db["users"].update_one(
@@ -39,9 +28,11 @@ class UserRepository:
         )
 
     @staticmethod
-    async def find_by_email(email: str):
-        """
-        이메일을 기반으로 유저 정보를 조회하는 메서드
-        """
+    async def find_by_slack_id(slack_id: str):
         db = get_database()
-        return await db["users"].find_one({"email": email})
+        return await db["users"].find_one({"slack_id": slack_id})
+
+    @staticmethod
+    async def update_slack_id(email: str, slack_id: str):
+        db = get_database()
+        await db["users"].update_one({"email": email}, {"$set": {"slack_id": slack_id}})

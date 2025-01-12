@@ -3,7 +3,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
 
 # ✅ GPT-4o 초기화
-llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
+llm = ChatOpenAI(model="gpt-4o", temperature=0.5)
 
 # ✅ 요약 프롬프트 템플릿
 prompt_template = ChatPromptTemplate.from_template("""
@@ -16,14 +16,19 @@ prompt_template = ChatPromptTemplate.from_template("""
 ⚡️ **요약 조건:**  
 1. 전체 흐름을 부드럽게 요약하되, 세부적인 내용은 생략해도 괜찮습니다.  
 2. '{topic}'과 연결되는 방향성을 암시하세요.  
-3. 명확한 결론보다는 열린 결말로 마무리하세요.
+3. 불렛포인트로 깔끔하게 제시해줘.               
+                                                   
 """)
 
 # ✅ LangChain 체인 생성
 chain = LLMChain(prompt=prompt_template, llm=llm)
 
-# ✅ 요약 생성 함수
 def generate_summary(recent_messages: list, topic: str):
     context = "\n".join(recent_messages)
     response = chain.invoke({"recent_messages": context, "topic": topic})
-    return response.content
+    
+    # LangChain의 응답에서 텍스트 추출
+    if isinstance(response, dict):
+        return response.get('text', '')  # 또는 response['text']
+    
+    return str(response)  # 다른 형태의 응답인 경우 문자열로 변환

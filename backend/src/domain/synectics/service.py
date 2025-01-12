@@ -1,6 +1,7 @@
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
+from src.domain.slackbot.repo import send_slack_message
 
 
 # ✅ GPT-4o 모델 초기화
@@ -10,19 +11,19 @@ llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
 def generate_related_words(word: str) -> list:
     prompt = f"'{word}'와 연상될 수 있으나 직접적이지 않은 단어 50개를 쉼표로 구분해줘."
     response = llm.invoke(prompt)
-    return [w.strip() for w in response.content.split(",")]  # ✅ 수정: .content 추가
+    return [w.strip() for w in response.content.split(",")]
 
 # ✅ 2️⃣ 공통 단어 추출
 def extract_common_words(words_a: list, words_b: list) -> list:
     prompt = f"다음 두 목록에서 공통적으로 연관성 있는 단어만 추출해줘.\n목록 A: {', '.join(words_a)}\n목록 B: {', '.join(words_b)}\n결과를 쉼표로 구분해줘."
     response = llm.invoke(prompt)
-    return [w.strip() for w in response.content.split(",")]  # ✅ 수정: .content 추가
+    return [w.strip() for w in response.content.split(",")]
 
 # ✅ 3️⃣ 시네틱스 문장 생성
 def generate_synectics_sentence(common_words: list) -> str:
     prompt = f"다음 단어들을 활용해 창의적인 시네틱스 문장 하나를 만들어줘: {', '.join(common_words)}"
     response = llm.invoke(prompt)
-    return response.content.strip()  # ✅ 수정: .content 추가
+    return response.content.strip()
 
 # ✅ 4️⃣ 전체 파이프라인 실행 함수
 def generate_synectics(word_a: str, word_b: str) -> str:

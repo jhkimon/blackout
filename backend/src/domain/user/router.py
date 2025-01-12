@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Request, HTTPException, Query
+from fastapi import APIRouter, Depends, Request, HTTPException, Query, Form
+from src.domain.user.service import UserService
 from src.domain.user.dto import UserRegisterDTO, UserLoginDTO
 from src.domain.user.service import UserService
 from src.auth.jwt_handler import create_access_token, blacklist_token
@@ -15,10 +16,17 @@ router = APIRouter(prefix="/user", tags=["User"])
 
 # ✅ 회원가입 API
 @router.post("/register", summary="회원가입")
-async def register(user_data: UserRegisterDTO):
-    user_id = await UserService.register_user(user_data.email, user_data.username, user_data.password)
-    return {"message": "회원가입 성공", "user_id": user_id}
-
+async def register(user_data: UserRegisterDTO, slack_id: str = Form(None)):
+    try:
+        user_id = await UserService.register_user(
+            user_data.email,
+            user_data.username,
+            user_data.password,
+            slack_id  # ✅ Slack ID 저장
+        )
+        return {"message": "회원가입 성공", "user_id": user_id}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 # ✅ 로그인 API
 
 @router.post("/login", summary="로그인")

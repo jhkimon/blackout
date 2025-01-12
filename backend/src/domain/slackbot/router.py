@@ -1,11 +1,25 @@
-from fastapi import APIRouter, Form, BackgroundTasks
-from src.domain.slackbot.repo import get_recent_messages, send_slack_message
+from fastapi import APIRouter, Form, BackgroundTasks, Request, HTTPException
+import json
+from src.domain.slackbot.repo import get_recent_messages, send_message_with_buttons
 from src.domain.summary.service import generate_summary
 from src.domain.synectics.service import generate_synectics
 from src.domain.user.service import UserService
+from src.domain.resynectics.router import resynect_idea
+from src.domain.slackbot.service import handle_button_action
+from src.domain.slackbot.service import send_slack_message, send_slack_message_async, send_message_with_buttons_service
+from src.domain.slackbot.service import process_done_action, process_resynectics_action
+from src.domain.slackbot.service import link_slack_to_user
+from src.domain.done.service import generate_done_summary
+from src.domain.resynectics.service import generate_resynectics_idea
+
 from slack_sdk.errors import SlackApiError
 from slack_sdk import WebClient
+
 import os
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 router = APIRouter(prefix="/slack")
 slack_client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
@@ -38,6 +52,11 @@ def format_result_message(result: str, result_type: str) -> str:
 
     return f"{emoji} *{result_type} 결과:*\n{result}"
 
+@router.post("/link_slack")
+async def link_slack(slack_user_id: str):
+    await link_slack_to_user(slack_user_id)
+    return {"message": "Slack 계정이 성공적으로 연결되었습니다."}
+
 # ✅ Slack Slash Command 핸들러
 @router.post("/commands")
 async def handle_slack_commands(
@@ -45,7 +64,7 @@ async def handle_slack_commands(
     command: str = Form(...),
     text: str = Form(...),
     channel_id: str = Form(...),
-    user_id: str = Form(...)  # ✅ Slack이 자동으로 제공하는 user_id 사용
+    user_id: str = Form(...)
 ):
     args = text.strip().split()
 
@@ -79,6 +98,10 @@ async def handle_slack_commands(
     # ✅ "요약하기" 명령어 처리
     if command_type == "요약하기":
         background_tasks.add_task(process_summary, channel_id, user_email)
+        summary = "대화의 요약 결과입니다. 추가적인 버튼 작업을 선택하세요."
+
+        # ✅ 비동기 작업으로 버튼 포함 메시지 전송
+        background_tasks.add_task(send_message_with_buttons_service, channel_id, summary)
         return {
             "response_type": "in_channel",
             "text": "📝 최근 대화 내용을 요약 중입니다. 잠시만 기다려주세요!"
@@ -101,18 +124,17 @@ async def handle_slack_commands(
 # ✅ Slack 요약 처리
 async def process_summary(channel_id: str, user_email: str):
     try:
+
         recent_messages = get_recent_messages(channel_id, limit=10)
-
-        # ✅ 이메일 기반으로 topic 조회
         topic = await UserService.get_user_topic(user_email)
-
-        # ✅ 요약 생성
+        
         summary = generate_summary(recent_messages, topic)
+        
         formatted_message = format_result_message(summary, "요약")
         send_long_message(channel_id, formatted_message)
 
     except Exception as e:
-        send_slack_message(channel_id, f"❌ 요약 생성 중 오류 발생: {str(e)}")
+        send_slack_message_async(channel_id, f"❌ 요약 생성 중 오류 발생: {str(e)}")
 
 # ✅ Slack 시네틱스 처리
 def process_synectics(word_a: str, word_b: str, channel_id: str):
@@ -122,3 +144,41 @@ def process_synectics(word_a: str, word_b: str, channel_id: str):
         send_long_message(channel_id, formatted_message)
     except Exception as e:
         send_slack_message(channel_id, f"❌ 시네틱스 생성 중 오류 발생: {str(e)}")
+
+
+# ✅ 요약 + 버튼 전송 처리
+async def process_summary_with_buttons(channel_id: str):
+    try:
+        recent_messages = get_recent_messages(channel_id, limit=10)
+        summary = generate_summary(recent_messages)
+
+        # ✅ 버튼 포함 메시지 전송
+        await send_message_with_buttons(channel_id, summary)
+
+    except Exception as e:
+        await send_slack_message(channel_id, f"❌ 요약 생성 중 오류 발생: {str(e)}")
+
+@router.post("/interactions")
+async def handle_interactions(request: Request):
+    try:
+        # ✅ Slack은 payload를 form-data로 전송함
+        form_data = await request.form()
+        payload = json.loads(form_data.get("payload"))  # ✅ payload 파싱
+
+        action_id = payload["actions"][0]["action_id"]
+        user_id = payload["user"]["id"]
+        channel_id = payload["channel"]["id"]
+
+        if action_id == "done_action":
+            await generate_done_summary(user_id, channel_id)
+        elif action_id == "resynectics_action":
+            await generate_resynectics_idea(user_id, channel_id)
+            return send_slack_message_async(channel_id, "🔄 새로운 아이디어를 생성 중입니다!")
+        else:
+            await send_slack_message_async(channel_id, "❗ 알 수 없는 버튼 액션입니다.")
+
+        return {"status": "success"}
+
+    except Exception as e:
+        print(f"❌ 인터랙션 처리 중 오류 발생: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"❌ 오류 발생: {str(e)}")
